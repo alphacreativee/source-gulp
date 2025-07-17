@@ -19,3 +19,11 @@ preloadImages("img").then(() => {
 $(window).on("beforeunload", function () {
   $(window).scrollTop(0);
 });
+// Khởi tạo LazyLoad
+const lazyLoadInstance = new LazyLoad({
+  elements_selector: ".lazy",
+  // Callback khi ảnh được load
+  callback_loaded: function (element) {
+    element.classList.add("loaded");
+  },
+});
