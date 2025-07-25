@@ -1,4 +1,6 @@
 import { preloadImages } from "../../libs/utils.js";
+("use strict");
+$ = jQuery;
 // setup lenis
 const lenis = new Lenis();
 lenis.on("scroll", ScrollTrigger.update);
@@ -16,9 +18,7 @@ preloadImages("img").then(() => {
 
   init();
 });
-$(window).on("beforeunload", function () {
-  $(window).scrollTop(0);
-});
+
 // Khởi tạo LazyLoad
 const lazyLoadInstance = new LazyLoad({
   elements_selector: ".lazy",
@@ -26,4 +26,23 @@ const lazyLoadInstance = new LazyLoad({
   callback_loaded: function (element) {
     element.classList.add("loaded");
   },
+});
+// click a
+window.addEventListener("scroll", updateProgressBar);
+window.addEventListener("resize", updateProgressBar);
+// loadpage
+let isLinkClicked = false;
+$("a").on("click", function (e) {
+  // Nếu liên kết dẫn đến trang khác (không phải hash link hoặc javascript void)
+  if (this.href && !this.href.match(/^#/) && !this.href.match(/^javascript:/)) {
+    isLinkClicked = true;
+    console.log("1");
+  }
+});
+
+$(window).on("beforeunload", function () {
+  if (!isLinkClicked) {
+    $(window).scrollTop(0);
+  }
+  isLinkClicked = false;
 });
